@@ -1,6 +1,6 @@
 # ImageShareWeb
 
-A web-based image sharing platform built with Flask, allowing users to upload, share, vote, and comment on images. Includes authentication, email verification, and moderation tools by an superuser.
+A web-based image sharing platform built with Flask, allowing users to upload, share, vote, and comment on images. Includes authentication, email verification, and moderation tools by a superuser.
 
 ## Features
 - User registration, login, and profile management
