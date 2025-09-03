@@ -60,5 +60,16 @@ ImageShareWeb/
 │── .env (not committed)
 ```
 
+## Screenshots
+
+**User image view:**  
+![User Image View](static/images/user_view.png)
+
+**Guest view:**  
+![Guest View](static/images/guest_view.png)
+
+**Superuser dashboard:**  
+![Superuser Dashboard](static/images/superuser_dashboard.png)
+
 ## License
 This project is licensed under the MIT License.
