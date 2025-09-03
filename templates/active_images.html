@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+{% block title %}Your Images{% endblock %}
+{% block content %}
+    <!-- Link to return to the user's account page -->
+    <h2>
+        <a href="{{ url_for('account') }}" aria-label="Return to your account">Back to Account</a>
+    </h2>   
+    <h1>Your Images</h1>
+    <!-- Grid of all images belonging to the current user -->
+    <div class="image-grid">
+        {% for image in current_user.images %}
+            <div class="image-item">
+                <!-- Image title and thumbnail -->
+                <h4>{{ image.name }}</h4>
+                <img src="{{ url_for('get_image', image_id=image.id) }}" width="200" alt="Image titled '{{ image.name }}' uploaded by {{ image.user.username }}">
+                <!-- Metadata: upload date, status, category -->
+                <p><strong>Uploaded on:</strong> {{ image.upload_date.strftime('%Y-%m-%d') }}</p>
+                <p><strong>Status:</strong> {{ image.moderation_status }} 
+                    {% if image.artist_archived %} (Archived) {% else %} (Unarchived) {% endif %}
+                </p>
+                <p><strong>Category:</strong> {{ image.category }}</p>
+                {% if image.moderation_status == 'approved' %}
+                    <!-- Show unique number and QR code if approved -->
+                    <p><strong>Unique Number:</strong> {{ image.unique_number }}</p>
+                    <img src="{{ url_for('generate_qr', image_id=image.id) }}" width="100" alt="QR Code for image '{{ image.name }}'">
+                {% endif %}
+                {% if image.moderation_status == 'unmoderated' %}
+                    <!-- Request moderation button for unmoderated images -->
+                    <form method="POST" action="{{ url_for('request_moderation', image_id=image.id) }}">
+                        <button type="submit" aria-label="Request moderation for '{{ image.name }}'">
+                            Request Moderation
+                        </button>
+                    </form>
+                {% endif %}
+                <!-- Archive/Unarchive button for this image -->
+                <form method="POST" action="{{ url_for('toggle_artist_archive', image_id=image.id) }}">
+                    <button type="submit" aria-label="{% if image.artist_archived %}Unarchive{% else %}Archive{% endif %} '{{ image.name }}'">
+                        {% if image.artist_archived %}Unarchive{% else %}Archive{% endif %}
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

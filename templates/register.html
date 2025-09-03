@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <h2>Register</h2>
+
+    <!-- Display Flash Messages -->
+    {% for message in get_flashed_messages(with_categories=True) %}
+        <div class="flash-message {{ message[0] }}">{{ message[1] }}</div>
+    {% endfor %}
+
+    <!-- Registration Form -->
+    <form method="POST">
+        {{ form.hidden_tag() }} <!-- CSRF Protection -->
+    
+        <!-- Username Input Field -->
+        <p>{{ form.username.label }} {{ form.username() }}</p>
+        {% if form.username.errors %}
+            <p class="form-errors">{{ form.username.errors[0] }}</p>
+        {% endif %}
+        
+        <!-- Email Input Field -->
+        <p>{{ form.email.label }} {{ form.email() }}</p>
+        {% if form.email.errors %}
+            <p class="form-errors">{{ form.email.errors[0] }}</p>
+        {% endif %}
+        
+        <!-- Password Input Field -->
+        <p>{{ form.password.label }} {{ form.password() }}</p>
+        
+        <!-- Submit Button -->
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

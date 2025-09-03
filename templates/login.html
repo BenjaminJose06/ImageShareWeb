@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Login</h2>
+
+    <!-- Login Form using Flask-WTF -->
+    <form method="POST">
+        {{ form.hidden_tag() }}  <!-- CSRF protection -->
+
+        <p>{{ form.email_or_username.label }} {{ form.email_or_username() }}</p>
+        <p>{{ form.password.label }} {{ form.password() }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+
+    <!-- Forgot Password Link -->
+    <p><a href="{{ url_for('reset_password_request') }}">Forgot Password?</a></p>
+{% endblock %}

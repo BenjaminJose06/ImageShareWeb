@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Moderated Images{% endblock %}
+{% block content %}
+<h1>Moderated Images</h1>
+<div class="image-list">
+    {% for image in images %}
+        <div class="image-item">
+            <h4>{{ image.name }} by {{ image.user.username }}</h4>
+            <img src="{{ url_for('get_image', image_id=image.id) }}" width="200" alt="Image">
+            <p>Status: {{ image.moderation_status }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

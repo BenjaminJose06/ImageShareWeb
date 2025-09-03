@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Home - ImageShare{% endblock %}
+
+{% block content %}
+    <h1>Welcome to ImageShare!</h1>
+    <p>Share, moderate, and explore images from the community.</p>
+
+    <!-- Show signup/login links only for guests -->
+    {% if not current_user.is_authenticated %}
+        <p>
+            <a href="{{ url_for('register') }}">Sign up</a> or 
+            <a href="{{ url_for('login') }}">Login</a> to get started.
+        </p>
+    {% endif %}
+
+{% endblock %}

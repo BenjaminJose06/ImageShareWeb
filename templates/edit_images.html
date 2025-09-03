@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Images{% endblock %}
+
+{% block content %}
+    <!-- Back Navigation to Superuser Dashboard -->
+    <h2><a href="{{ url_for('superuser_dashboard') }}" aria-label="Go back to Superuser Dashboard">Back to Superuser Dashboard</a></h2>
+
+    <h1>Edit Images</h1>
+
+    <!-- Filter Images by Category -->
+    <h2>Filter Images by Category</h2>
+    <form method="GET" action="{{ url_for('edit_images') }}">
+        <label for="category">Select Category:</label>
+        <select id="category" name="category">
+            <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Display All Editable Images -->
+    <div class="image-grid">
+        {% for image in images %}
+            <div class="image-item">
+                <!-- Image Title and Image -->
+                <h4>{{ image.name }} by {{ image.user.username }}</h4>
+                <img src="{{ url_for('get_image', image_id=image.id) }}" width="200" 
+                     alt="Image titled '{{ image.name }}' uploaded by {{ image.user.username }}">
+
+                <!-- Image Details -->
+                <p><strong>Uploaded on:</strong> {{ image.upload_date.strftime('%Y-%m-%d') }}</p>
+                <p><strong>Status:</strong> {{ image.moderation_status }} {% if image.is_archived %} (Archived) {% else %} (Unarchived) {% endif %}</p>
+                <p><strong>Category:</strong> {{ image.category }}</p>
+                <p><strong>Votes:</strong> {{ image.vote_count }}</p>
+
+                <!-- Display Last Reset Information if Available -->
+                {% if image.last_reset_date %}
+                    <p><strong>Last Reset:</strong> {{ image.last_reset_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <p><strong>Reason:</strong> {{ image.last_reset_reason }}</p>
+                {% endif %}
+
+                <!-- Reset Votes Form -->
+                <form method="POST" action="{{ url_for('reset_votes', image_id=image.id) }}" class="inline-form">
+                    <label for="reset_reason_{{ image.id }}">Reset Reason:</label>
+                    <input type="text" id="reset_reason_{{ image.id }}" name="reset_reason" required>
+                    <button type="submit" aria-label="Reset votes for '{{ image.name }}'">Reset</button>
+                </form>
+
+                <!-- Update Moderation Status and Category -->
+                <form method="POST" action="{{ url_for('moderate_image', image_id=image.id) }}" class="inline-form">
+                    <label for="status_{{ image.id }}">Moderation Status:</label>
+                    <select id="status_{{ image.id }}" name="status">
+                        <option value="approved" {% if image.moderation_status == 'approved' %}selected{% endif %}>Moderated</option>
+                        <option value="pending" {% if image.moderation_status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="unmoderated" {% if image.moderation_status == 'unmoderated' %}selected{% endif %}>Unmoderated</option>
+                    </select>
+
+                    <label for="category_{{ image.id }}">Set Category:</label>
+                    <select id="category_{{ image.id }}" name="category">
+                        {% for cat in categories %}
+                            <option value="{{ cat }}" {% if image.category == cat %}selected{% endif %}>{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit" aria-label="Update status and category for '{{ image.name }}'">Update</button>
+                </form>
+
+                <!-- Archive / Unarchive Image -->
+                <form method="POST" action="{{ url_for('toggle_archive', image_id=image.id) }}">
+                    <button type="submit" 
+                            aria-label="{% if image.is_archived %}Unarchive{% else %}Archive{% endif %} '{{ image.name }}'">
+                        {% if image.is_archived %}Unarchive{% else %}Archive{% endif %}
+                    </button>
+                </form>
+
+                <!-- View Comments (Only for Moderated Images) -->
+                {% if image.moderation_status == "approved" %}
+                    <a href="{{ url_for('view_comments', image_id=image.id) }}" aria-label="View comments for '{{ image.name }}'">View Comments</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

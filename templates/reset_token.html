@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Reset Password{% endblock %}
+
+{% block content %}
+    <h2>Reset Your Password</h2>
+
+    <!-- Flash Messages for Notifications -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Password Reset Form -->
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <!-- New Password Input -->
+        <p>{{ form.password.label }} {{ form.password() }}</p>
+
+        <!-- Confirm Password Input -->
+        <p>{{ form.confirm_password.label }} {{ form.confirm_password() }}</p>
+
+        <!-- Submit Button -->
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

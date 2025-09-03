@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block content %}
+    <!-- Back Navigation to Account Page -->
+    <h2><a href="{{ url_for('account') }}" aria-label="Return to your account">Back to Account</a></h2>
+
+    <h1>{{ user.username }}'s Profile</h1>
+    
+    <!-- User Information -->
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Followers:</strong> {{ user.follower_count() }}</p>
+
+    <!-- Follow/Unfollow Button (Only Available for Regular Users) -->
+    {% if current_user.is_authenticated and not current_user.is_superuser and user.id != current_user.id %}
+        {% set is_following = user.id in following %}
+        {% if is_following %}
+            <form method="POST" action="{{ url_for('unfollow_artist', artist_id=user.id) }}">
+                <button type="submit" aria-label="Unfollow {{ user.username }}">Unfollow</button>
+            </form>
+        {% else %}
+            <form method="POST" action="{{ url_for('follow_artist', artist_id=user.id) }}">
+                <button type="submit" aria-label="Follow {{ user.username }}">Follow</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <!-- Display List of Followers -->
+    {% if followers %}
+        <h3>People Following {{ user.username }}:</h3>
+        <ul class="follower-list">
+            {% for follower in followers %}
+                <li>{{ follower.username }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{{ user.username }} has no followers yet.</p>
+    {% endif %}
+
+    <!-- Display Most Upvoted Artwork -->
+    {% if most_upvoted_image %}
+        <h3>Most Upvoted Image</h3>
+        <p><strong>{{ most_upvoted_image.name }}</strong> ({{ most_upvoted_image.vote_count }} votes)</p>
+        <img src="{{ url_for('get_image', image_id=most_upvoted_image.id) }}" width="200"
+             alt="Most upvoted image: '{{ most_upvoted_image.name }}' with {{ most_upvoted_image.vote_count }} votes.">
+    {% else %}
+        <p>{{ user.username }} has no upvoted image yet.</p>
+    {% endif %}
+
+{% endblock %}

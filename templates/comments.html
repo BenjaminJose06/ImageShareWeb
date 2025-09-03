@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Comments for {{ image.name }}{% endblock %}
+
+{% block content %}
+    <!-- Back Navigation Based on User Type -->
+    <h2>
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_superuser %}
+                <a href="{{ url_for('edit_images') }}" aria-label="Go back to edit images">Back to Edit Images</a>
+            {% else %}
+                <a href="{{ url_for('view_all_images') }}" aria-label="Go back to all images">Back to All Images</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('guest_view') }}" aria-label="Go back to all images">Back to All Images</a>
+        {% endif %}
+    </h2>
+
+    <!-- Page Title & Artwork Display -->
+    <h1>Comments for "{{ image.name }}"</h1>
+    <img src="{{ url_for('get_image', image_id=image.id) }}" width="300"
+         alt="Image titled '{{ image.name }}' uploaded by {{ image.user.username }}">
+
+    <!-- Comment Section -->
+    <div class="comment-section">
+        {% if comments %}
+            <h3>Previous Comments</h3>
+            <ul class="comment-list">
+                {% for comment in comments %}
+                    <li>
+                        <strong>{{ comment.user.username }}</strong>: {{ comment.content }} 
+                        ({{ comment.timestamp.strftime('%Y-%m-%d %H:%M:%S') }})
+
+                        <!-- Superuser Can Delete Comments -->
+                        {% if current_user.is_authenticated and current_user.is_superuser %}
+                            <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.id) }}" 
+                                  style="display:inline;">
+                                <button type="submit" aria-label="Delete comment by {{ comment.user.username }}">
+                                      Delete
+                                </button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endif %}
+
+        <!-- Comment Form (Only for Logged-in Users) -->
+        {% if current_user.is_authenticated %}
+            <h3>Add a Comment</h3>
+            <form method="POST">
+                <label for="comment-content">Write your comment:</label>
+                <textarea id="comment-content" name="content" rows="3" required></textarea><br>
+                <button type="submit" aria-label="Post comment">Post Comment</button>
+            </form>
+        {% else %}
+            <p><em><a href="{{ url_for('login') }}" aria-label="Login to comment">Login</a> to comment.</em></p>
+        {% endif %}
+    </div>
+{% endblock %}

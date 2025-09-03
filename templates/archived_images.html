@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+{% block title %}Archived Images{% endblock %}
+{% block content %}
+    <!-- Navigation: Back to dashboard or account depending on user role -->
+    <h2>
+        {% if current_user.is_superuser %}
+            <a href="{{ url_for('superuser_dashboard') }}" aria-label="Return to Superuser Dashboard">Back to Superuser Dashboard</a>
+        {% else %}
+            <a href="{{ url_for('account') }}" aria-label="Return to your account">Back to Account</a>
+        {% endif %}
+    </h2>
+    <h1>Archived Images</h1>
+    <!-- Category filter for archived images -->
+    <h2>Filter Images by Category</h2>
+    <form method="GET" action="{{ url_for('archived_images') }}">
+        <label for="category">Select Category:</label>
+        <select name="category">
+            <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+    <!-- Grid of archived images -->
+    <div class="image-grid">
+        {% for image in images %}
+            <div class="image-item">
+                <!-- Image title and thumbnail -->
+                <h4>{{ image.name }} by {{ image.user.username }}</h4>
+                <img src="{{ url_for('get_image', image_id=image.id) }}" width="200" alt="Image titled '{{ image.name }}' uploaded by {{ image.user.username }}">
+                <!-- Metadata: upload date, status, category -->
+                <p><strong>Uploaded on:</strong> {{ image.upload_date.strftime('%Y-%m-%d') }}</p>
+                <p><strong>Status:</strong> {{ image.moderation_status }} (Archived)</p>
+                <p><strong>Category:</strong> {{ image.category }}</p>
+                {% if image.moderation_status == 'approved' %}
+                    <!-- Show unique number and QR code if approved -->
+                    <p><strong>Unique Number:</strong> {{ image.unique_number }}</p>
+                    <img src="{{ url_for('generate_qr', image_id=image.id) }}" width="100" alt="QR Code for image '{{ image.name }}'">
+                {% endif %}
+                {% if current_user.is_superuser or image.user_id == current_user.id %}
+                    <!-- Unarchive button for superuser or image owner -->
+                    <form method="POST" action="{{ url_for('toggle_archive', image_id=image.id) }}">
+                        <button type="submit" aria-label="Unarchive '{{ image.name }}'">
+                            Unarchive
+                        </button>
+                    </form>
+                {% else %}
+                    <!-- Info message for users who cannot unarchive -->
+                    <p><i>Only the superuser or the original artist can unarchive this image.</i></p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

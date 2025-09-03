@@ -1,0 +1,299 @@
+/* General Page Styling */
+body {
+    font-family: Arial, sans-serif; /* Set the default font */
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    color: #333;
+    text-align: center; /* Center align text globally */
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #313030;
+    padding: 20px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: inline-block;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+/* Main Content Container */
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Flash Messages (for notifications) */
+.flash-messages {
+    margin: 10px 0;
+}
+
+.flash-message {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.flash-message.success {
+    background-color: #59c55c;
+    color: white;
+}
+
+.flash-message.danger {
+    background-color: #f33528;
+    color: white;
+}
+
+/* Buttons Styling */
+button, .form-button {
+    background-color: #0198ca;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+button:hover, .form-button:hover {
+    background-color: #005f75;
+}
+
+/* Image Styling */
+img {
+    border-radius: 5px;
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
+}
+
+/* Flask-WTF Form Styling */
+form {
+    text-align: center;
+    width: 80%;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f4f5;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+form p {
+    text-align: left;
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input, select, textarea {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #008CBF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 140, 186, 0.5);
+}
+
+/* Flask-WTF Form Error Messages */
+.form-errors {
+    color: #f44339;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+/* Image Display */
+.image-item img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+}
+
+.image-item button, .image-item a {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+    padding: 10px;
+    text-align: center;
+    background-color: #008CBD;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.image-item button:hover, .image-item a:hover {
+    background-color: #005f78;
+}
+
+/* Grid Layout for Images */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Centered Content */
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Individual Image Styling */
+.image-item {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: black;
+    width: 100%;
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 900px) {
+    .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .image-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* Follower List */
+.follower-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    width: 50%;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.follower-list li {
+    list-style: none;
+    text-align: center;
+    padding: 5px;
+    width: 100%;
+    border-bottom: 1px solid #dde;
+}
+
+.follower-list li:last-child {
+    border-bottom: none;
+}
+
+/* Comment Section Styling */
+.comment-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    width: 60%;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.comment-list {
+    width: 100%;
+    padding: 0;
+}
+
+.comment-list li {
+    list-style: none;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddc;
+}
+
+.comment-list li:last-child {
+    border-bottom: none;
+}
+
+/* Inline Forms for Moderation & Voting */
+.inline-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.inline-form input, .inline-form select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.inline-form button {
+    padding: 5px 10px;
+    background-color: #008CBE;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.inline-form button:hover {
+    background-color: #005f75;
+}
+
+/* Vote Button Styles */
+/* Green for Upvoted */
+.upvoted {
+    background-color: #4CAF50 !important;
+    color: white !important;
+}
+
+/* Red for Downvoted */
+.downvoted {
+    background-color: #f44336 !important;
+    color: white !important;
+}
+
+/* Default Voting Button */
+.vote-btn {
+    background-color: #008CBE;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.vote-btn:hover {
+    opacity: 0.8;
+}

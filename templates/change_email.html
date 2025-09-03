@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Change Email{% endblock %}
+
+{% block content %}
+    <!-- Page Title -->
+    <h2>Change Your Email</h2>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+    
+        <p>{{ form.new_email.label }} {{ form.new_email() }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}All Images{% endblock %}
+
+{% block content %}
+    <!-- Main container for all images view -->
+    <div class="container">
+        <!-- Navigation: Back to account page -->
+        <h2><a href="{{ url_for('account') }}" aria-label="Return to your account">Back to Account</a></h2>
+        <h1>All Images</h1>
+        <!-- Category filter for images -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="text-align:center;">Filter Images by Category</h3>
+            <form method="GET" action="{{ url_for('view_all_images') }}">
+                <label for="category">Select Category:</label>
+                <select id="category" name="category">
+                    <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Filter</button>
+            </form>
+        </div>
+        <!-- Grid of images -->
+        <div class="image-grid">
+            {% for image in images %}
+                <div class="image-item" data-image-id="{{ image.id }}" data-user-vote="{{ user_votes.get(image.id, '') }}">
+                    <!-- Image title and uploader info -->
+                    <h4>{{ image.name }} by {{ image.user.username }}</h4>
+                    {% if image.user.id == current_user.id %}
+                        <span>(You uploaded this image)</span>
+                    {% else %}
+                        <a href="{{ url_for('public_profile', user_id=image.user.id) }}" aria-label="View profile of {{ image.user.username }}">View Profile</a>
+                    {% endif %}
+                    {% if current_user.is_authenticated and not current_user.is_superuser and image.user.id in following %}
+                        <em>You follow this user</em>
+                    {% endif %}
+                    <p>Followers: {{ image.user.follower_count() }}</p>
+                    {% if image.moderation_status == "approved" %}
+                        <!-- Approved image: show details, voting, comments -->
+                        <img src="{{ url_for('get_image', image_id=image.id) }}" width="200" alt="Image titled '{{ image.name }}' uploaded by {{ image.user.username }}">
+                        <p><strong>Uploaded on:</strong> {{ image.upload_date.strftime('%Y-%m-%d') }}</p>
+                        <p><strong>Status:</strong> {{ image.moderation_status }}</p>
+                        <p><strong>Unique Number:</strong> {{ image.unique_number }}</p>
+                        <p><strong>Category:</strong> {{ image.category }}</p>
+                        <a href="{{ url_for('view_comments', image_id=image.id) }}" aria-label="View comments for '{{ image.name }}'">View Comments</a>
+                        <img src="{{ url_for('generate_qr', image_id=image.id) }}" width="100" alt="QR Code for image '{{ image.name }}'">
+                        <p><strong>Votes: <span id="vote-count-{{ image.id }}">{{ image.vote_count }}</span></strong></p>
+                        <!-- Voting buttons -->
+                        <button class="vote-btn" data-image-id="{{ image.id }}" data-vote-type="upvote" aria-label="Upvote '{{ image.name }}'">👍 Upvote</button>
+                        <button class="vote-btn" data-image-id="{{ image.id }}" data-vote-type="downvote" aria-label="Downvote '{{ image.name }}'">👎 Downvote</button>
+                    {% else %}
+                        <!-- Placeholder for images not yet approved -->
+                        <img src="{{ url_for('static', filename='images/placeholder.png') }}" width="200" alt="Placeholder image for image that has not been approved">
+                        <div style="margin-top: 350px;">
+                            <h2><strong>This image is currently inaccessible as it is not moderated.</strong></h2>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

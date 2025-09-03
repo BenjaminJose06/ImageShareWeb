@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Page Title: Can be overridden by child templates -->
+    <title>{% block title %}ImageShare{% endblock %}</title>
+    
+    <!-- Link to the main CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- JavaScript file for voting functionality -->
+    <script src="{{ url_for('static', filename='js/vote.js') }}"></script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        
+        {% if current_user.is_authenticated %}
+            <!-- If the user is logged in, show the account and logout options -->
+            <a href="{% if current_user.is_superuser %}{{ url_for('superuser_dashboard') }}{% else %}{{ url_for('account') }}{% endif %}">Account</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <!-- If the user is not logged in, show login, register, and guest view options -->
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('guest_view') }}" aria-label="Continue as a guest">Continue as Guest</a>
+        {% endif %}
+    </nav>
+
+    <!-- Flash Messages (for success, error, or info notifications) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content Container (Dynamic content from child templates goes here) -->
+    <div class="content-container">  
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>2025 ImageShare - Share and explore images with the world.</p>
+    </footer>
+
+    <!-- JavaScript file for additional scripts -->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+</body>
+</html>

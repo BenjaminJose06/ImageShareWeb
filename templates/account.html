@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+    <h2>Your Account</h2>
+    <p><strong>Username:</strong> {{ current_user.username }}</p>
+    <p><strong>Email:</strong> {{ current_user.email }}</p>
+
+    <br><br>
+    
+    <!-- Change Email Button -->
+    {% if not current_user.is_superuser %}
+        <a href="{{ url_for('change_email') }}">
+            <button type="button">Change Email</button>
+        </a>
+    {% else %}
+        <p><strong>Superusers cannot change their email.</strong></p>
+    {% endif %}
+
+    <br><br>
+    
+    <!-- Change Password Button -->
+    <a href="{{ url_for('change_password') }}">
+        <button type="button">Change Password</button>
+    </a>
+
+    <br><br>
+
+    <a href="{{ url_for('profile') }}">View My Profile</a><br><br>
+    <a href="{{ url_for('upload_image') }}">Upload Image</a><br><br>
+    <a href="{{ url_for('artist_archived_images') }}">View Archived Images</a><br><br>
+    <a href="{{ url_for('user_active_images') }}">View Active Images</a><br><br>
+    <a href="{{ url_for('user_moderated_images') }}">View Moderated Images</a><br><br>
+    <a href="{{ url_for('view_all_images') }}">View All Images</a>
+
+{% endblock %}
